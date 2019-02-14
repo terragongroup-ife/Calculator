@@ -50,11 +50,6 @@ body{
 .double{
     width: 49.7%;
 }
-
-.triple {
-    width: 74.8%;
-}
-
 .calc-row {
     display: flex;
     align-content: stretch;
