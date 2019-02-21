@@ -1,7 +1,7 @@
 let runningTotal = 0;
 let previousOperator = null;
 const screen = document.querySelector('.screen');
-let operators = ["+", "-", "*", "/"]; 
+let operators = ["+", "-", "*", "/","(",")"]; 
 let symbols = ["Clr", "C", "="];
 
 document.querySelector('.calc-buttons').addEventListener("click",function(event){
@@ -29,30 +29,15 @@ function buttonClick(value) {
         screen.innerText += value;
         }
     }
-}
-  
-// function handleNumber(value) {
-//   if(buffer === "0") {
-//         buffer = value;
-//     } else {
-//         buffer += value;
-//     }
-//  }
 
 function handleSymbol(value) {
     switch  (value) {
         case 'Clr':
         screen.innerText = "0";
         runningTotal = 0;
-        // previousOperator = null;
         break;
         case "=":
-        // if(previousOperator === null) {
-        //     return;
-        // }
-        // previousOperator = null;
         Calculate();
-        // runningTotal = 0;
         break;
         case "C":
         if (screen.innerText.length === 1) {
@@ -61,36 +46,8 @@ function handleSymbol(value) {
             screen.innerText = screen.innerText.substring(0, screen.innerText.length - 1);
         }
         break;
-    //  default:
-    //      handleMath(value);
-    //   break;
     }
 }
-
-// function handleMath(value) {
-//     const intBuffer = parseInt(buffer);
-//     if (runningTotal === 0){
-//         runningTotal = intBuffer;
-//     } else {
-//         flushOperation(intBuffer);
-//     }
-
-//     previousOperator = value;
-
-//      buffer = "0";
-// }
-
-// function flushOperation () {
-//     if (previousOperator === "+") {
-//         runningTotal += intBuffer;
-//     } else  if (previousOperator === "-") {
-//         runningTotal -= intBuffer;
-//     } else  if (previousOperator === "*") {
-//         runningTotal *= intBuffer;
-//     } else {
-//         runningTotal /= intBuffer;
-//     }
-//     }
 
 function Calculate() {
     cArr = [];
@@ -137,4 +94,70 @@ function Calculate() {
         i++;
     }
     screen.innerText  = runningTotal;
-}    
+} 
+}   
+
+var operationData = {
+    add: {
+      precedence: 1,
+      name: 'add',
+      operation: function (a, b) {return a + b;},
+      output: function (a, b) {return a + ' + ' + b;},
+      buttonHTML: '+'
+    },
+    subtract: {
+      precedence: 1,
+      name: 'subtract',
+      operation: function (a, b) {return a - b;},
+      output: function (a, b) {return a + ' - ' + b;},
+      buttonHTML: '-'
+    },
+    multiply: {
+      precedence: 2,
+      name: 'multiply',
+      operation: function (a, b) {return a * b;},
+      output: function (a, b) {return a + ' * ' + b;},
+      buttonHTML: '*'
+    },
+    divide: {
+    precedence: 2,
+    name: 'divide',
+    operation: function (a, b) {return a / b;},
+    isInvalidInput: function (a, b) {return b == 0 ? 'division by 0' : false;},
+    output: function (a, b) {return a + ' / ' + b;},
+    buttonHTML: '/'
+    },
+    bracket: {
+        precedence: 3,
+        singleInput: true,
+        name: 'context',
+        operation: function (a) {return a;},
+        output: function (a) {return '(' + a + ')';}
+      }
+    }
+    // return {
+    //        openContext: function () {
+    //         error && reset();
+    //         var lastOperation = levels.peek().peek();
+    //         if (closedContext || lastOperation && lastOperation.isSaturated()) return;
+    //         levels.push(new Stack);
+    //         return this;
+    //       },
+    //        closeContext: function (number) {
+    //         error && reset();
+    //         if (levels.length <= 1) return;
+    //         var input = closedContext || number;
+    //         var stack = levels.peek();
+    //         var lastOperation = stack.peek();
+    //         closedContext = new Operation(operationData.context).addInput(
+    //           lastOperation ? (function () {
+    //             lastOperation.addInput(input);
+    //             collapse(0);
+    //             return stack.pop();
+    //           }()) : input
+    //         );
+    //         partialResult = Number(closedContext);
+    //         levels.pop();
+    //         return this;
+    //       }
+   // }
